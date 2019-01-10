@@ -33,7 +33,7 @@ func (t *SegTree) propagate(sti, stl, str int) {
     }
 }
 
-func (t *SegTree) query(sti, stl, str, l, r int) int {
+func (t *SegTree) pQuery(sti, stl, str, l, r int) int {
     t.propagate(sti, stl, str)
 
     if str < l || r < stl {
@@ -46,10 +46,10 @@ func (t *SegTree) query(sti, stl, str, l, r int) int {
 
     mid := (str+stl)/2
 
-    return f(t.query(sti*2+1,stl,mid,l,r),t.query(sti*2+2,mid+1,str,l,r))
+    return f(t.pQuery(sti*2+1,stl,mid,l,r),t.pQuery(sti*2+2,mid+1,str,l,r))
 }
 
-func (t *SegTree) UpdateRange(sti, stl, str, l, r, amm int) {
+func (t *SegTree) pUpdateRange(sti, stl, str, l, r, amm int) {
     t.propagate(sti, stl, str)
     
     if stl >= l && str <= r {
@@ -65,16 +65,16 @@ func (t *SegTree) UpdateRange(sti, stl, str, l, r, amm int) {
     
     mid := (stl + str)/2
     
-    t.UpdateRange(sti*2+1,stl,mid,l,r,amm)
-    t.UpdateRange(sti*2+2,mid+1,str,l,r,amm)
+    t.pUpdateRange(sti*2+1,stl,mid,l,r,amm)
+    t.pUpdateRange(sti*2+2,mid+1,str,l,r,amm)
     
     t.st[sti] = f(t.st[sti*2+1],t.st[sti*2+2])
 }
 
-func (t *SegTree) PQuery(l, r int) int {
-    return t.query(0,0,t.size-1,l,r)
+func (t *SegTree) query(l, r int) int {
+    return t.pQuery(0,0,t.size-1,l,r)
 }
 
-func (t *SegTree) PUpdateRange(l, r, amm int){
-    t.UpdateRange(0,0,t.size-1,l,r,amm);
+func (t *SegTree) updateRange(l, r, amm int){
+    t.pUpdateRange(0,0,t.size-1,l,r,amm);
 }
